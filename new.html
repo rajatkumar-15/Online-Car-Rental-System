@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Car Rental System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      margin: 10px 0;
+      text-align: center;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .car-list {
+      margin: 1rem 0;
+    }
+    .car-item {
+      padding: 1rem;
+      border: 1px solid #ccc;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Car Rental System</h1>
+</header>
+
+<div class="container">
+  <h2>Rent a Car</h2>
+  
+  <div class="form-group">
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" placeholder="Enter your name" />
+  </div>
+
+  <div class="form-group">
+    <label for="carSelect">Select Car:</label>
+    <select id="carSelect">
+      <option value="C001">Toyota Camry ($60/day)</option>
+      <option value="C002">Honda Accord ($70/day)</option>
+      <option value="C003">Mahindra Thar ($150/day)</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="rentalDays">Number of Rental Days:</label>
+    <input type="number" id="rentalDays" min="1" placeholder="Enter number of days" />
+  </div>
+
+  <button class="btn" onclick="rentCar()">Rent Car</button>
+
+  <h2>Return a Car</h2>
+
+  <div class="form-group">
+    <label for="returnCarId">Enter Car ID to Return:</label>
+    <input type="text" id="returnCarId" placeholder="e.g. C001" />
+  </div>
+
+  <button class="btn" onclick="returnCar()">Return Car</button>
+
+  <h2>Available Cars</h2>
+  <div class="car-list" id="availableCars">
+    <div class="car-item">Toyota Camry (ID: C001)</div>
+    <div class="car-item">Honda Accord (ID: C002)</div>
+    <div class="car-item">Mahindra Thar (ID: C003)</div>
+  </div>
+</div>
+
+<script>
+  // Dummy simulation of backend actions
+  const availableCars = {
+    C001: { brand: "Toyota", model: "Camry", available: true },
+    C002: { brand: "Honda", model: "Accord", available: true },
+    C003: { brand: "Mahindra", model: "Thar", available: true }
+  };
+
+  function rentCar() {
+    const name = document.getElementById("customerName").value;
+    const carId = document.getElementById("carSelect").value;
+    const days = document.getElementById("rentalDays").value;
+
+    if (!name || !days) {
+      alert("Please enter your name and rental days.");
+      return;
+    }
+
+    if (!availableCars[carId].available) {
+      alert("Sorry, this car is already rented.");
+      return;
+    }
+
+    availableCars[carId].available = false;
+    alert(Car ${availableCars[carId].brand} ${availableCars[carId].model} rented by ${name} for ${days} days.);
+
+    updateAvailableCars();
+  }
+
+  function returnCar() {
+    const carId = document.getElementById("returnCarId").value;
+
+    if (!availableCars[carId]) {
+      alert("Invalid Car ID.");
+      return;
+    }
+
+    if (availableCars[carId].available) {
+      alert("This car is not currently rented.");
+      return;
+    }
+
+    availableCars[carId].available = true;
+    alert(Car ${availableCars[carId].brand} ${availableCars[carId].model} returned successfully.);
+
+    updateAvailableCars();
+  }
+
+  function updateAvailableCars() {
+    const carList = document.getElementById("availableCars");
+    carList.innerHTML = "";
+
+    for (const id in availableCars) {
+      if (availableCars[id].available) {
+        const car = availableCars[id];
+        const carItem = document.createElement("div");
+        carItem.className = "car-item";
+        carItem.innerText = ${car.brand} ${car.model} (ID: ${id});
+        carList.appendChild(carItem);
+      }
+    }
+  }
+
+  updateAvailableCars();
+</script>
+
+</body>
+</html>
